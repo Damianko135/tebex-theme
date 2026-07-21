@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { Toaster } from '$lib/components/ui/sonner/index.js';
 	import type { Pathname } from '$app/types';
 	import { resolve } from '$app/paths';
 	import { page } from '$app/state';
@@ -10,6 +11,7 @@
 </script>
 
 <svelte:head><link rel="icon" href={favicon} /></svelte:head>
+<Toaster />
 {@render children()}
 
 <div style="display:none">
