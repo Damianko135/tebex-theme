@@ -2,7 +2,10 @@
 	import { untrack } from 'svelte';
 	import { superForm, type Infer, type SuperValidated } from 'sveltekit-superforms';
 	import { zod4Client } from 'sveltekit-superforms/adapters';
+	import LoaderCircleIcon from '@lucide/svelte/icons/loader-circle';
 	import * as Form from '$lib/components/ui/form';
+	import * as Card from '$lib/components/ui/card';
+	import { Button } from '$lib/components/ui/button';
 	import { Input } from '$lib/components/ui/input';
 	import { signInForm } from './schema';
 
@@ -16,46 +19,62 @@
 		}
 	);
 
-	const { form: formData, errors, enhance, message } = form;
+	const { form: formData, errors, enhance, message, submitting, delayed } = form;
 </script>
 
-<form method="POST" action="?/signIn" use:enhance class="space-y-4">
-	<div class="space-y-1 text-center">
-		<h1 class="text-xl font-semibold">Sign in</h1>
-		<p class="text-sm text-muted-foreground">Enter your email and password to continue.</p>
-	</div>
+<Card.Root class="w-full max-w-sm">
+	<Card.Header>
+		<Card.Title>Sign in</Card.Title>
+		<Card.Description>Enter your email and password to continue.</Card.Description>
+	</Card.Header>
 
-	<Form.Field {form} name="email">
-		<Form.Control>
-			{#snippet children({ props })}
-				<Form.Label>Email</Form.Label>
-				<Input {...props} type="email" autocomplete="email" bind:value={$formData.email} />
-			{/snippet}
-		</Form.Control>
-		<Form.FieldErrors />
-	</Form.Field>
+	<form method="POST" action="?/signIn" use:enhance>
+		<Card.Content class="flex flex-col gap-4">
+			<Form.Field {form} name="email">
+				<Form.Control>
+					{#snippet children({ props })}
+						<Form.Label>Email</Form.Label>
+						<Input
+							{...props}
+							type="email"
+							autocomplete="email"
+							autofocus
+							bind:value={$formData.email}
+						/>
+					{/snippet}
+				</Form.Control>
+				<Form.FieldErrors />
+			</Form.Field>
 
-	<Form.Field {form} name="password">
-		<Form.Control>
-			{#snippet children({ props })}
-				<Form.Label>Password</Form.Label>
-				<Input
-					{...props}
-					type="password"
-					autocomplete="current-password"
-					bind:value={$formData.password}
-				/>
-			{/snippet}
-		</Form.Control>
-		<Form.FieldErrors />
-	</Form.Field>
+			<Form.Field {form} name="password">
+				<Form.Control>
+					{#snippet children({ props })}
+						<Form.Label>Password</Form.Label>
+						<Input
+							{...props}
+							type="password"
+							autocomplete="current-password"
+							bind:value={$formData.password}
+						/>
+					{/snippet}
+				</Form.Control>
+				<Form.FieldErrors />
+			</Form.Field>
 
-	{#if $message}
-		<p class="text-sm text-destructive">{$message}</p>
-	{/if}
-	{#if $errors._errors}
-		<p class="text-sm text-destructive">{$errors._errors.join(', ')}</p>
-	{/if}
+			{#if $message || $errors._errors}
+				<p role="alert" class="text-sm text-destructive">
+					{$message ?? $errors._errors?.join(', ')}
+				</p>
+			{/if}
+		</Card.Content>
 
-	<Form.Button class="w-full">Sign in</Form.Button>
-</form>
+		<Card.Footer>
+			<Button type="submit" class="w-full" disabled={$submitting}>
+				{#if $delayed}
+					<LoaderCircleIcon class="animate-spin" />
+				{/if}
+				Sign in
+			</Button>
+		</Card.Footer>
+	</form>
+</Card.Root>
