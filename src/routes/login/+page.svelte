@@ -9,7 +9,7 @@
 	let mode = $state<'signIn' | 'signUp'>('signIn');
 </script>
 
-<div class="mx-auto flex min-h-svh max-w-sm flex-col justify-center gap-4 px-4">
+<div class="mx-auto flex h-full max-w-sm flex-1 flex-col justify-center gap-4 px-4">
 	{#if mode === 'signIn'}
 		<SignInForm data={data.signInForm} />
 		<p class="text-center text-sm text-muted-foreground">
