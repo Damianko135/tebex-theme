@@ -1,16 +1,13 @@
 import { fail, redirect } from '@sveltejs/kit';
-import { superValidate, setError } from 'sveltekit-superforms';
+import { superValidate, message } from 'sveltekit-superforms';
 import { zod4 } from 'sveltekit-superforms/adapters';
 import { APIError } from 'better-auth/api';
 import { auth } from '$lib/server/auth';
 import { signInForm, signUpForm } from './schema';
 import type { Actions, PageServerLoad } from './$types';
 
-import { toast } from 'svelte-sonner';
-
 export const load: PageServerLoad = async (event) => {
 	if (event.locals.user) {
-		toast.error('You are already logged in.');
 		return redirect(302, '/');
 	}
 
@@ -36,9 +33,9 @@ export const actions: Actions = {
 				}
 			});
 		} catch (error) {
-			const message =
+			const errorMessage =
 				error instanceof APIError ? error.message : 'Unexpected error, please try again.';
-			setError(form, '', message);
+			message(form, errorMessage, { status: 400 });
 			return fail(400, { signInForm: form });
 		}
 
@@ -61,9 +58,9 @@ export const actions: Actions = {
 				}
 			});
 		} catch (error) {
-			const message =
+			const errorMessage =
 				error instanceof APIError ? error.message : 'Unexpected error, please try again.';
-			setError(form, '', message);
+			message(form, errorMessage, { status: 400 });
 			return fail(400, { signUpForm: form });
 		}
 

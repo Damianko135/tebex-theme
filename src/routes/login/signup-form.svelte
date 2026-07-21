@@ -2,6 +2,7 @@
 	import { untrack } from 'svelte';
 	import { superForm, type Infer, type SuperValidated } from 'sveltekit-superforms';
 	import { zod4Client } from 'sveltekit-superforms/adapters';
+	import { toast } from 'svelte-sonner';
 	import LoaderCircleIcon from '@lucide/svelte/icons/loader-circle';
 	import * as Form from '$lib/components/ui/form';
 	import * as Card from '$lib/components/ui/card';
@@ -15,11 +16,14 @@
 		untrack(() => data),
 		{
 			id: 'signUp',
-			validators: zod4Client(signUpForm)
+			validators: zod4Client(signUpForm),
+			onUpdated: ({ form }) => {
+				if (form.message) toast.error(form.message);
+			}
 		}
 	);
 
-	const { form: formData, errors, enhance, message, submitting, delayed } = form;
+	const { form: formData, enhance, submitting, delayed } = form;
 </script>
 
 <Card.Root class="w-full max-w-sm">
@@ -79,12 +83,6 @@
 				</Form.Control>
 				<Form.FieldErrors />
 			</Form.Field>
-
-			{#if $message || $errors._errors}
-				<p role="alert" class="text-sm text-destructive">
-					{$message ?? $errors._errors?.join(', ')}
-				</p>
-			{/if}
 		</Card.Content>
 
 		<Card.Footer>

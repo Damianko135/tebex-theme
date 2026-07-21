@@ -1,5 +1,5 @@
 <script lang="ts">
-	import SignInForm from './form.svelte';
+	import SignInForm from './signin-form.svelte';
 	import SignUpForm from './signup-form.svelte';
 	import { Button } from '$lib/components/ui/button';
 	import type { PageServerData } from './$types';
