@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { untrack } from 'svelte';
 	import { superForm, type Infer, type SuperValidated } from 'sveltekit-superforms';
 	import { zod4Client } from 'sveltekit-superforms/adapters';
 	import * as Form from '$lib/components/ui/form';
@@ -7,10 +8,13 @@
 
 	let { data }: { data: SuperValidated<Infer<typeof signUpForm>> } = $props();
 
-	const form = superForm(data, {
-		id: 'signUp',
-		validators: zod4Client(signUpForm)
-	});
+	const form = superForm(
+		untrack(() => data),
+		{
+			id: 'signUp',
+			validators: zod4Client(signUpForm)
+		}
+	);
 
 	const { form: formData, errors, enhance, message } = form;
 </script>
