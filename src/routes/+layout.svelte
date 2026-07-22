@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { ModeWatcher } from 'mode-watcher';
 	import { Toaster } from '$lib/components/ui/sonner/index.js';
-	import ModeToggle from '$lib/components/mode-toggle.svelte';
+	import LightToggle from '$lib/components/light-toggle.svelte';
 	import { Header } from '$lib/components/layout/header';
 	import { Footer } from '$lib/components/layout/footer';
 	import type { NavItem } from '$lib/components/layout/types.js';
@@ -27,7 +27,7 @@
 <div class="flex min-h-svh flex-col">
 	<Header {appName} {navItems}>
 		{#snippet actions()}
-			<ModeToggle />
+			<LightToggle />
 		{/snippet}
 	</Header>
 	<main class="flex flex-1 flex-col">
