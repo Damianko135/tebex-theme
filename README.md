@@ -15,7 +15,7 @@ To recreate this project with the same configuration:
 
 ```sh
 # recreate this project
-bun x sv@0.16.4 create --template minimal --types ts --add prettier eslint tailwindcss="plugins:none" sveltekit-adapter="adapter:auto" drizzle="database:postgresql+postgresql:postgres.js+docker:yes" better-auth="demo:password" paraglide="languageTags:en, nl+demo:no" mcp="ide:claude-code+setup:remote" vitest="usages:unit,component" playwright --install bun .
+bun x sv@0.16.4 create --template minimal --types ts --add prettier eslint tailwindcss="plugins:none" sveltekit-adapter="adapter:cloudflare+cfTarget:workers" drizzle="database:d1" better-auth="demo:password" paraglide="languageTags:en, nl+demo:no" mcp="ide:claude-code+setup:remote" vitest="usages:unit,component" playwright --install bun .
 ```
 
 ## Developing

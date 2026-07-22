@@ -1,6 +1,6 @@
 import { sequence } from '@sveltejs/kit/hooks';
 import { building } from '$app/environment';
-import { auth } from '$lib/server/auth';
+import { createAuth } from '$lib/server/auth';
 import { svelteKitHandler } from 'better-auth/svelte-kit';
 import type { Handle } from '@sveltejs/kit';
 import { getTextDirection } from '$lib/paraglide/runtime';
@@ -19,6 +19,13 @@ const handleParaglide: Handle = ({ event, resolve }) =>
 	});
 
 const handleBetterAuth: Handle = async ({ event, resolve }) => {
+	if (!event.platform?.env?.DB) {
+		throw new Error('D1 binding "DB" not found - are you running with wrangler?');
+	}
+
+	event.locals.auth = createAuth(event.platform.env.DB);
+
+	const { auth } = event.locals;
 	const session = await auth.api.getSession({ headers: event.request.headers });
 
 	if (session) {
