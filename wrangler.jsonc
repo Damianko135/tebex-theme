@@ -12,7 +12,8 @@
 		{
 			"binding": "DB",
 			"database_name": "tebex",
-			"database_id": "REPLACE_WITH_D1_DATABASE_ID"
+			"database_id": "7626eb2b-aac1-46ff-8c3c-f997fee1716a",
+			"migrations_dir": "drizzle/migrations"
 		}
 	],
 	"workers_dev": true,
