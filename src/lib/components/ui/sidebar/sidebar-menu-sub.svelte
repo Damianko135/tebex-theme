@@ -7,17 +7,18 @@
 		class: className,
 		children,
 		...restProps
-	}: WithElementRef<HTMLAttributes<HTMLDivElement>> = $props();
+	}: WithElementRef<HTMLAttributes<HTMLUListElement>> = $props();
 </script>
 
-<div
+<ul
 	bind:this={ref}
-	data-slot="card-action"
+	data-slot="sidebar-menu-sub"
+	data-sidebar="menu-sub"
 	class={cn(
-		'cn-card-action col-start-2 row-span-2 row-start-1 self-start justify-self-end',
+		'mx-3.5 flex min-w-0 translate-x-px flex-col gap-1 border-l border-sidebar-border px-2.5 py-0.5 group-data-[collapsible=icon]:hidden',
 		className
 	)}
 	{...restProps}
 >
 	{@render children?.()}
-</div>
+</ul>

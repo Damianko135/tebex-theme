@@ -8,6 +8,7 @@
 	import * as Sheet from '$lib/components/ui/sheet/index.js';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import { cn, type WithElementRef } from '$lib/utils.js';
+	import { IsMobile } from '$lib/hooks/is-mobile.svelte.js';
 	import type { NavItem } from '../types.js';
 
 	let {
@@ -23,7 +24,12 @@
 		actions?: Snippet;
 	} = $props();
 
+	const isMobile = new IsMobile();
 	let mobileOpen = $state(false);
+
+	$effect(() => {
+		if (!isMobile.current) mobileOpen = false;
+	});
 </script>
 
 <header

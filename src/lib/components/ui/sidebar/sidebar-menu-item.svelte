@@ -7,14 +7,15 @@
 		class: className,
 		children,
 		...restProps
-	}: WithElementRef<HTMLAttributes<HTMLDivElement>> = $props();
+	}: WithElementRef<HTMLAttributes<HTMLLIElement>, HTMLLIElement> = $props();
 </script>
 
-<div
+<li
 	bind:this={ref}
-	data-slot="card-footer"
-	class={cn('flex items-center rounded-b-xl border-t bg-muted/50 p-(--card-spacing)', className)}
+	data-slot="sidebar-menu-item"
+	data-sidebar="menu-item"
+	class={cn('group/menu-item relative', className)}
 	{...restProps}
 >
 	{@render children?.()}
-</div>
+</li>

@@ -15,7 +15,7 @@ servers:
     description: Main API scoped to public token
     variables:
       token:
-        default: ""
+        default: ''
         description: The store's public token
 tags:
   - name: Headless
@@ -26,23 +26,23 @@ paths:
   /:
     get:
       tags:
-      - Headless
+        - Headless
       operationId: getWebstore
       summary: Get the webstore's information
-      description: |- 
-          Gets the webstore associated with the provided token
+      description: |-
+        Gets the webstore associated with the provided token
       responses:
         '200':
-          description: |- 
+          description: |-
             Successful response returns the webstore's information.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/WebstoreResponse"
+                $ref: '#/components/schemas/WebstoreResponse'
   /pages:
     get:
       tags:
-      - Headless
+        - Headless
       operationId: getCustomPages
       summary: Get custom pages defined for the webstore.
       description: |-
@@ -54,21 +54,21 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/CMSPagesResponse"
+                $ref: '#/components/schemas/CMSPagesResponse'
 
   /baskets/{basketIdent}:
     get:
       tags:
-      - Headless
+        - Headless
       operationId: getBasket
       summary: Get a basket
       parameters:
-        - $ref: "#/components/parameters/basketIdent"
-      description: |- 
-          Gets a basket associated with the provided identifier.
+        - $ref: '#/components/parameters/basketIdent'
+      description: |-
+        Gets a basket associated with the provided identifier.
       responses:
         '200':
-          description: |- 
+          description: |-
             Successful response returns the basket information.
           content:
             application/json:
@@ -77,11 +77,11 @@ paths:
   /baskets:
     post:
       tags:
-      - Headless
+        - Headless
       operationId: createBasket
       summary: Create a new basket
-      description: |- 
-          Creates a new basket for use during checkout.
+      description: |-
+        Creates a new basket for use during checkout.
       requestBody:
         content:
           application/json:
@@ -91,24 +91,22 @@ paths:
                 complete_url:
                   type: string
                   description: A URL the user can return to when checkout is completed.
-                  example: "https://example.tebex.io/thank-you"
+                  example: 'https://example.tebex.io/thank-you'
                 cancel_url:
                   type: string
                   description: A URL the user can return to when cancelling checkout.
-                  example: "https://tebex.io/"
+                  example: 'https://tebex.io/'
                 custom:
                   type: object
                   description: Custom data you wish to associate with the basket. This data will be included with webhook responses and GET requests associated with the Basket.
-                  example: {
-                    "foo": "bar"
-                  }
+                  example: { 'foo': 'bar' }
                 complete_auto_redirect:
                   type: boolean
                   example: true
                   description: True if the user should automatically be redirected to the relevant complete/cancel URL #TODO
       responses:
         '200':
-          description: |- 
+          description: |-
             Successful response returns the basket information.
           content:
             application/json:
@@ -119,11 +117,11 @@ paths:
   /baskets/{basketIdent}/auth?returnUrl={returnUrl}:
     get:
       tags:
-      - Headless
+        - Headless
       operationId: getBasketAuthUrl
       summary: Get auth links for basket
       parameters:
-        - $ref: "#/components/parameters/basketIdent"
+        - $ref: '#/components/parameters/basketIdent'
         - in: path
           name: returnUrl
           description: The URL you would like to redirect the user to after successful basket authentication.
@@ -131,12 +129,12 @@ paths:
             type: string
             example: https://example.tebex.io/
           required: true
-      description: |- 
-          Fetches a basket's auth URL. The player should be directed here in order for them to authorize their account.
-          When complete, they will be returned to the provided `returnUrl` and the basket will be authorized from that moment onwards.
+      description: |-
+        Fetches a basket's auth URL. The player should be directed here in order for them to authorize their account.
+        When complete, they will be returned to the provided `returnUrl` and the basket will be authorized from that moment onwards.
       responses:
         '200':
-          description: |- 
+          description: |-
             Successful response returns the auth provider options and URLs of the sign-in link.
           content:
             application/json:
@@ -148,15 +146,15 @@ paths:
   /baskets/{basketIdent}/dynamic-packages:
     put:
       tags:
-      - Headless
+        - Headless
       operationId: createDynamicPackage
       summary: Add packages to a dynamic category for a basket.
       parameters:
-        - $ref: "#/components/parameters/basketIdent"
+        - $ref: '#/components/parameters/basketIdent'
       description: |-
-          Populates a dynamic category with custom packages for the given basket. Dynamic categories are created in the creator panel with the type `dynamic`, and are typically populated in response to a `basket.authenticated` webhook.
+        Populates a dynamic category with custom packages for the given basket. Dynamic categories are created in the creator panel with the type `dynamic`, and are typically populated in response to a `basket.authenticated` webhook.
 
-          Once created, the packages can be fetched using the category endpoints with both `includePackages=1` and `basketIdent` provided.
+        Once created, the packages can be fetched using the category endpoints with both `includePackages=1` and `basketIdent` provided.
       requestBody:
         content:
           application/json:
@@ -175,31 +173,31 @@ paths:
   /categories:
     get:
       tags:
-      - Headless
+        - Headless
       operationId: getCategories
       summary: Get all categories
-      description: |- 
-          Gets all categories from a webstore. This does not include package information. To include package information, add `?includePackages=1` to the URL.
+      description: |-
+        Gets all categories from a webstore. This does not include package information. To include package information, add `?includePackages=1` to the URL.
       responses:
         '200':
-          description: |- 
+          description: |-
             Successful response returns a list of category information.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/CategoryResponse'
-                      
+
   /categories?includePackages=1:
     get:
       tags:
-      - Headless
+        - Headless
       operationId: getCategoriesIncludePackages
       summary: Gets all categories and packages
-      description: |- 
-          Gets all categories from a webstore including packages.
+      description: |-
+        Gets all categories from a webstore including packages.
       responses:
         '200':
-          description: |- 
+          description: |-
             Successful response returns a list of category information.
           content:
             application/json:
@@ -209,7 +207,7 @@ paths:
   /categories?usernameId={usernameId}&includePackages=1:
     get:
       tags:
-      - Headless
+        - Headless
       operationId: getUserTieredCategories
       security:
         - basicAuth: []
@@ -218,14 +216,14 @@ paths:
         - in: path
           name: usernameId
           schema:
-              type: integer
-              example: 76561198042467022
+            type: integer
+            example: 76561198042467022
           required: true
-      description: |- 
-          Gets all categories from the webstore, returning active tier information for the given player.
+      description: |-
+        Gets all categories from the webstore, returning active tier information for the given player.
       responses:
         '200':
-          description: |- 
+          description: |-
             Successful response returns a list of category information.
           content:
             application/json:
@@ -235,15 +233,15 @@ paths:
   /categories?includePackages=1&basketIdent={basketIdent}:
     get:
       tags:
-      - Headless
+        - Headless
       operationId: getDynamicCategories
       summary: Get Dynamic Categories
       parameters:
-        - $ref: "#/components/parameters/basketIdent"
+        - $ref: '#/components/parameters/basketIdent'
       description: |-
-          Gets all categories from a webstore including packages. When `basketIdent` is provided, dynamic categories are populated with the packages associated with that basket.
+        Gets all categories from a webstore including packages. When `basketIdent` is provided, dynamic categories are populated with the packages associated with that basket.
 
-          If a basket identifier is not provided, dynamic categories will be empty as the basket is required to relate packages to the category.
+        If a basket identifier is not provided, dynamic categories will be empty as the basket is required to relate packages to the category.
       responses:
         '200':
           description: |-
@@ -256,16 +254,16 @@ paths:
   /categories/{categoryId}:
     get:
       tags:
-      - Headless
+        - Headless
       operationId: getCategory
       summary: Get specific category
       parameters:
-        - $ref: "#/components/parameters/basketIdent"
-      description: |- 
-          Gets information about a category and returns the packages in that category.
+        - $ref: '#/components/parameters/basketIdent'
+      description: |-
+        Gets information about a category and returns the packages in that category.
       responses:
         '200':
-          description: |- 
+          description: |-
             Successful response returns the category without package information.
           content:
             application/json:
@@ -275,7 +273,7 @@ paths:
   /categories/{categoryId}?includePackages=1:
     get:
       tags:
-      - Headless
+        - Headless
       operationId: getCategoryIncludePackages
       summary: Get a category with all packages
       parameters:
@@ -287,7 +285,7 @@ paths:
             example: 127244343
           description: The ID or slug of the category to fetch.
       description: |-
-          Gets information about a category and returns the packages in that category.
+        Gets information about a category and returns the packages in that category.
       responses:
         '200':
           description: |-
@@ -300,7 +298,7 @@ paths:
   /categories/{categoryId}?includePackages=1&basketIdent={basketIdent}:
     get:
       tags:
-      - Headless
+        - Headless
       operationId: getCategoryIncludeDynamicPackages
       summary: Gets a specific category including packages, populating a dynamic category for the given basket.
       parameters:
@@ -311,11 +309,11 @@ paths:
             type: string
             example: 1234
           description: The ID or slug of the category to fetch.
-        - $ref: "#/components/parameters/basketIdent"
+        - $ref: '#/components/parameters/basketIdent'
       description: |-
-          Gets information about a category and returns the packages in that category. When the category is dynamic and `basketIdent` is provided, the category is populated with the packages associated with that basket.
+        Gets information about a category and returns the packages in that category. When the category is dynamic and `basketIdent` is provided, the category is populated with the packages associated with that basket.
 
-          If a basket identifier is not provided, a dynamic category will be empty as the basket is required to relate packages to the category.
+        If a basket identifier is not provided, a dynamic category will be empty as the basket is required to relate packages to the category.
       responses:
         '200':
           description: |-
@@ -328,7 +326,7 @@ paths:
   /packages/{packageId}:
     get:
       tags:
-      - Headless
+        - Headless
       operationId: getPackage
       summary: Get package
       parameters:
@@ -340,12 +338,12 @@ paths:
           required: true
           description: The package's ID or slug.
       description: |-
-          Gets a package from a webstore by its ID or slug.
+        Gets a package from a webstore by its ID or slug.
 
-          Note: this endpoint does not support packages belonging to dynamic categories. Use the category endpoints with `includePackages=1` and `basketIdent` to fetch dynamic packages.
+        Note: this endpoint does not support packages belonging to dynamic categories. Use the category endpoints with `includePackages=1` and `basketIdent` to fetch dynamic packages.
       responses:
         '200':
-          description: |- 
+          description: |-
             Successful response returns the package information.
           content:
             application/json:
@@ -354,13 +352,13 @@ paths:
   /packages:
     get:
       tags:
-      - Headless
+        - Headless
       operationId: getAllPackages
       summary: Get all packages
       description: |-
-          Gets all packages from a webstore.
+        Gets all packages from a webstore.
 
-          Note: this endpoint does not support packages belonging to dynamic categories. Use the category endpoints with `includePackages=1` and `basketIdent` to fetch dynamic packages.
+        Note: this endpoint does not support packages belonging to dynamic categories. Use the category endpoints with `includePackages=1` and `basketIdent` to fetch dynamic packages.
       responses:
         '200':
           description: |-
@@ -372,7 +370,7 @@ paths:
   /packages?ipAddress={ipAddress}:
     get:
       tags:
-      - Headless
+        - Headless
       operationId: getAllPackagesWithAuthedIP
       summary: Get packages
       parameters:
@@ -383,11 +381,11 @@ paths:
             type: string
             example: 127.0.0.1
           description: An IP address can be provided with authenticated requests
-      description: |- 
-          Gets all packages from a webstore.
+      description: |-
+        Gets all packages from a webstore.
       responses:
         '200':
-          description: |- 
+          description: |-
             Successful response returns a list of package information.
           content:
             application/json:
@@ -398,16 +396,16 @@ paths:
   /packages?basketIdent={basketIdent}:
     get:
       tags:
-      - Headless
+        - Headless
       operationId: getPackagesForBasket
       summary: Get packages available for basket
       parameters:
-        - $ref: "#/components/parameters/basketIdent"
-      description: |- 
-          Gets all packages available to the provided basket.
+        - $ref: '#/components/parameters/basketIdent'
+      description: |-
+        Gets all packages available to the provided basket.
       responses:
         '200':
-          description: |- 
+          description: |-
             Successful response returns a list of package information.
           content:
             application/json:
@@ -418,11 +416,11 @@ paths:
   /packages?ipAddress={ipAddress}&basketIdent={basketIdent}:
     get:
       tags:
-      - Headless
+        - Headless
       operationId: getAllPackagesWithAuthedIPAndBasket
       summary: Get packages available for IP and basket
       parameters:
-        - $ref: "#/components/parameters/basketIdent"
+        - $ref: '#/components/parameters/basketIdent'
         - in: path
           name: ipAddress
           required: true
@@ -430,11 +428,11 @@ paths:
             type: string
             example: 127.0.0.1
           description: An IP address can be provided with authenticated requests.
-      description: |- 
-          Gets all packages from a webstore.
+      description: |-
+        Gets all packages from a webstore.
       responses:
         '200':
-          description: |- 
+          description: |-
             Successful response returns a list of package information.
           content:
             application/json:
@@ -445,13 +443,13 @@ paths:
   /baskets/{basketIdent}/creator-codes:
     post:
       tags:
-      - Headless
+        - Headless
       operationId: applyCreatorCode
       summary: Apply a creator code
       parameters:
-        - $ref: "#/components/parameters/basketIdent"
-      description: |- 
-          Applies a creator code to a basket.
+        - $ref: '#/components/parameters/basketIdent'
+      description: |-
+        Applies a creator code to a basket.
       requestBody:
         description: Provide a `creator_code` to apply to the basket.
         content:
@@ -464,7 +462,7 @@ paths:
                   example: Academy10
       responses:
         '200':
-          description: |- 
+          description: |-
             Successful response returns a success object
           content:
             application/json:
@@ -482,29 +480,29 @@ paths:
   /baskets/{basketIdent}/creator-codes/remove:
     post:
       tags:
-      - Headless
+        - Headless
       operationId: removeCreatorCode
       summary: Removes the creator code from the basket.
       parameters:
-        - $ref: "#/components/parameters/basketIdent"
-      description: |- 
-          Removes the creator code from the basket.
+        - $ref: '#/components/parameters/basketIdent'
+      description: |-
+        Removes the creator code from the basket.
       responses:
         '200':
-          description: |- 
+          description: |-
             Creator code removed successfully.
         '422':
           description: The provided request is invalid. The error response will include detail as to which parameter failed validation.
   /baskets/{basketIdent}/giftcards:
     post:
       tags:
-      - Headless
+        - Headless
       operationId: applyGiftCard
       summary: Apply a gift card
       parameters:
-        - $ref: "#/components/parameters/basketIdent"
-      description: |- 
-          Applies a gift card to the basket.
+        - $ref: '#/components/parameters/basketIdent'
+      description: |-
+        Applies a gift card to the basket.
       requestBody:
         description: Provide a `card_number` to apply to the basket.
         content:
@@ -513,7 +511,7 @@ paths:
               $ref: '#/components/schemas/GiftCard'
       responses:
         '200':
-          description: |- 
+          description: |-
             Successful response returns a success message.
           content:
             application/json:
@@ -529,13 +527,13 @@ paths:
   /baskets/{basketIdent}/giftcards/remove:
     post:
       tags:
-      - Headless
+        - Headless
       operationId: removeGiftCard
       summary: Remove a gift card from the basket.
       parameters:
-        - $ref: "#/components/parameters/basketIdent"
-      description: |- 
-          Removes a gift card from the basket.
+        - $ref: '#/components/parameters/basketIdent'
+      description: |-
+        Removes a gift card from the basket.
       requestBody:
         description: Provide the `card_number` to remove from the basket.
         content:
@@ -545,23 +543,23 @@ paths:
               properties:
                 card_number:
                   type: string
-                  example: "0127 0244 7210 1111"
+                  example: '0127 0244 7210 1111'
       responses:
         '200':
-          description: |- 
+          description: |-
             Gift card removed successfully.
         '422':
           description: The provided request is invalid. The error response will include detail as to which parameter failed validation.
   /baskets/{basketIdent}/coupons:
     post:
       tags:
-      - Headless
+        - Headless
       operationId: applyCoupon
       summary: Apply a coupon
       parameters:
-        - $ref: "#/components/parameters/basketIdent"
-      description: |- 
-          Applies a coupon to a basket.
+        - $ref: '#/components/parameters/basketIdent'
+      description: |-
+        Applies a coupon to a basket.
       requestBody:
         description: Provide a `coupon_code` to apply to the basket.
         content:
@@ -570,7 +568,7 @@ paths:
               $ref: '#/components/schemas/ApplyCouponRequest'
       responses:
         '200':
-          description: |- 
+          description: |-
             Successful response returns a success message.
           content:
             application/json:
@@ -587,13 +585,13 @@ paths:
   /baskets/{basketIdent}/coupons/remove:
     post:
       tags:
-      - Headless
+        - Headless
       operationId: removeCoupon
       summary: Remove a coupon from the basket.
       parameters:
-        - $ref: "#/components/parameters/basketIdent"
-      description: |- 
-          Removes a coupon code from a basket
+        - $ref: '#/components/parameters/basketIdent'
+      description: |-
+        Removes a coupon code from a basket
       requestBody:
         description: Provide a `coupon_code` to remove from the basket.
         content:
@@ -602,81 +600,80 @@ paths:
               $ref: '#/components/schemas/ApplyCouponRequest'
       responses:
         '200':
-          description: |- 
+          description: |-
             Successful response.
         '422':
           description: The provided request is invalid. The error response will include detail as to which parameter failed validation.
 
-
   /{basketIdent}/packages:
-   servers:
-     - url: https://headless.tebex.io/api/baskets
-       description: Basket-only API, account token not required
-   post:
-    tags:
-    - Baskets
-    operationId: addBasketPackage
-    summary: Add package to basket
-    parameters:
-      - $ref: "#/components/parameters/basketIdent"
-    description: |-
+    servers:
+      - url: https://headless.tebex.io/api/baskets
+        description: Basket-only API, account token not required
+    post:
+      tags:
+        - Baskets
+      operationId: addBasketPackage
+      summary: Add package to basket
+      parameters:
+        - $ref: '#/components/parameters/basketIdent'
+      description: |-
         Add a package with the given ID to the basket.
 
         To add a package belonging to a dynamic category, set `dynamic` to `true`. Without this property the API will treat the request as a normal package ID.
-    requestBody:
-      content:
-        application/json:
-          schema:
-            type: object
-            required:
-              - package_id
-              - quantity
-            properties:
-              package_id:
-                type: string
-                example: 6276316
-              quantity:
-                type: integer
-                example: 1
-              dynamic:
-                type: boolean
-                example: false
-                description: Set to `true` when adding a package that belongs to a dynamic category. When omitted, the API acts as if a normal package ID was provided.
-    responses:
-      '200':
-        description: |- 
-          Successful response.
+      requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Basket'
-      '422':
-        description: The provided request is invalid. The error response will include detail as to which parameter failed validation.
+              type: object
+              required:
+                - package_id
+                - quantity
+              properties:
+                package_id:
+                  type: string
+                  example: 6276316
+                quantity:
+                  type: integer
+                  example: 1
+                dynamic:
+                  type: boolean
+                  example: false
+                  description: Set to `true` when adding a package that belongs to a dynamic category. When omitted, the API acts as if a normal package ID was provided.
+      responses:
+        '200':
+          description: |-
+            Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Basket'
+        '422':
+          description: The provided request is invalid. The error response will include detail as to which parameter failed validation.
   /{basketIdent}/packages/remove:
     servers:
       - url: https://headless.tebex.io/api/baskets
         description: Basket-only API, account token not required
     post:
       tags:
-      - Baskets
+        - Baskets
       operationId: removeBasketPackage
       summary: Remove a package from a basket
       parameters:
-        - $ref: "#/components/parameters/basketIdent"
-      description: |- 
-          Remove the given package ID from the basket.
+        - $ref: '#/components/parameters/basketIdent'
+      description: |-
+        Remove the given package ID from the basket.
       requestBody:
         content:
           application/json:
             schema:
               type: object
               properties:
-                package_id: 
+                package_id:
                   type: string
                   example: 6276316
       responses:
         '200':
-          description: |- 
+          description: |-
             Successful response returns the basket.
           content:
             application/json:
@@ -690,13 +687,13 @@ paths:
         description: Basket-only API, account token not required
     put:
       tags:
-      - Baskets
+        - Baskets
       operationId: updatePackageQuantity
       summary: Update package quantity
       parameters:
-        - $ref: "#/components/parameters/basketIdent"
-      description: |- 
-          Sets the quantity of the given item in the basket. The user must be logged in before the quantity can be changed.
+        - $ref: '#/components/parameters/basketIdent'
+      description: |-
+        Sets the quantity of the given item in the basket. The user must be logged in before the quantity can be changed.
       requestBody:
         content:
           application/json:
@@ -708,14 +705,14 @@ paths:
                   example: 1
       responses:
         '200':
-          description: |- 
+          description: |-
             Successful response.
         '422':
           description: The provided request is invalid. The error response will include detail as to which parameter failed validation.
   /tiers/{tierId}:
     patch:
       tags:
-      - Headless
+        - Headless
       operationId: updateTier
       security:
         - basicAuth: []
@@ -741,16 +738,15 @@ paths:
                   example: 6834822
       responses:
         '200':
-          description: 
-            Successful response.
+          description: Successful response.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/UpdateTierResponse"
+                $ref: '#/components/schemas/UpdateTierResponse'
   /sidebar:
     get:
       tags:
-      - Headless
+        - Headless
       operationId: getSidebar
       summary: Retrieves the available sidebar modules.
       parameters:
@@ -765,12 +761,11 @@ paths:
         Retrieves the available sidebar modules configured for the store.
       responses:
         '200':
-          description: 
-            Successful response.
+          description: Successful response.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ModulesResponse"
+                $ref: '#/components/schemas/ModulesResponse'
 components:
   securitySchemes:
     basicAuth:
@@ -795,24 +790,24 @@ components:
         description:
           type: string
           description: Store description in HTML format
-          example: "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris fermentum eget tellus et cursus. Pellentesque vel vehicula velit, sit amet tincidunt diam. Aliquam sit amet fermentum lorem.</p>"
+          example: '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris fermentum eget tellus et cursus. Pellentesque vel vehicula velit, sit amet tincidunt diam. Aliquam sit amet fermentum lorem.</p>'
         name:
           type: string
           description: Name of the store
-          example: "Minecraft Store"
+          example: 'Minecraft Store'
         webstore_url:
           type: string
           format: uri
           description: URL of the webstore
-          example: "https://example.tebex.io"
+          example: 'https://example.tebex.io'
         currency:
           type: string
           description: Currency used in the store
-          example: "USD"
+          example: 'USD'
         lang:
           type: string
           description: Language of the store
-          example: "en"
+          example: 'en'
         logo:
           type: string
           format: uri
@@ -821,7 +816,7 @@ components:
         platform_type:
           type: string
           description: Platform type for the store
-          example: "Minecraft: Java Edition"
+          example: 'Minecraft: Java Edition'
         platform_type_id:
           type: string
           example: minecraft
@@ -833,7 +828,7 @@ components:
           type: string
           format: date-time
           description: The date and time when the store was created
-          example: "2023-05-25T09:49:37+00:00"
+          example: '2023-05-25T09:49:37+00:00'
     WebstoreResponse:
       type: object
       properties:
@@ -849,7 +844,7 @@ components:
           example: true
         message:
           type: string
-          example: "Tier successfully upgraded, please allow a few moments for your changes to take effect."
+          example: 'Tier successfully upgraded, please allow a few moments for your changes to take effect.'
     CMSPagesResponse:
       type: object
       properties:
@@ -866,11 +861,11 @@ components:
         created_at:
           type: string
           format: date-time
-          example: "2023-11-13T20:59:54.000000Z"
+          example: '2023-11-13T20:59:54.000000Z'
         updated_at:
           type: string
           format: date-time
-          example: "2023-11-13T20:59:54.000000Z"
+          example: '2023-11-13T20:59:54.000000Z'
         account_id:
           type: integer
           example: 244
@@ -898,14 +893,14 @@ components:
     ErrorResponse:
       type: object
       properties:
-        type: 
+        type:
           description: A URI reference [RFC3986] that identifies the
             problem type.  This specification encourages that, when
             dereferenced, it provide human-readable documentation for the
             problem type (e.g., using HTML [W3C.REC-html5-20141028]).  When
             this member is not present, its value is assumed to be
             "about:blank".
-        title: 
+        title:
           type: string
           description: A short, human-readable summary of the problem type.  It SHOULD NOT change from occurrence to occurrence of the problem, except for purposes of localization
           example: Bad Request
@@ -926,19 +921,19 @@ components:
       properties:
         card_number:
           type: string
-          example: "0127 0244 7210 1111"
+          example: '0127 0244 7210 1111'
     ApplyCouponRequest:
       type: object
       properties:
         coupon_code:
           type: string
-          example: "Academy10"
+          example: 'Academy10'
     Coupon:
       type: object
       properties:
         code:
           type: string
-          example: "Academy10"
+          example: 'Academy10'
     BasketAuthResponse:
       type: array
       items:
@@ -946,10 +941,10 @@ components:
         properties:
           name:
             type: string
-            example: "FiveM"
+            example: 'FiveM'
           url:
             type: string
-            example: "https://ident.tebex.io/"
+            example: 'https://ident.tebex.io/'
     BasketResponse:
       type: object
       properties:
@@ -1026,14 +1021,14 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/BasketPackage'
-        custom: 
+        custom:
           type: object
           nullable: true
-          example: 
+          example:
             foo: bar
             ref: 1234
         links:
-          $ref: "#/components/schemas/BasketLinks"
+          $ref: '#/components/schemas/BasketLinks'
     BasketLinks:
       type: object
       properties:
@@ -1050,8 +1045,8 @@ components:
       properties:
         data:
           type: array
-          items: 
-            $ref: "#/components/schemas/Category"
+          items:
+            $ref: '#/components/schemas/Category'
     Category:
       type: object
       properties:
@@ -1060,13 +1055,13 @@ components:
           example: 2678660
         name:
           type: string
-          example: "Test"
+          example: 'Test'
           description: User-friendly name of the category
         slug:
           type: string
           description: Short identifier slug for the category
           nullable: true
-        parent: 
+        parent:
           type: object
           description: Parent category, if applicable
           format: Category
@@ -1078,7 +1073,7 @@ components:
         active_tier:
           description: If this is a tiered category and the usernameId is provided, this will be the active tier information for this category.
           nullable: true
-          $ref: "#/components/schemas/Tier"
+          $ref: '#/components/schemas/Tier'
         description:
           type: string
           description: HTML description of the category
@@ -1086,10 +1081,10 @@ components:
           type: array
           description: Packages within the category. For dynamic categories, packages use the `DynamicPackage` shape and are only populated when a `basketIdent` is provided.
           items:
-            $ref: "#/components/schemas/Package"
-#            anyOf:
-#              - $ref: "#/components/schemas/Package"
-##              - $ref: "#/components/schemas/DynamicPackage"
+            $ref: '#/components/schemas/Package'
+          #            anyOf:
+          #              - $ref: "#/components/schemas/Package"
+          ##              - $ref: "#/components/schemas/DynamicPackage"
           nullable: true
         order:
           type: integer
@@ -1212,16 +1207,16 @@ components:
           description: The package ID
         description:
           type: string
-          example: "100 coins added to your character"
+          example: '100 coins added to your character'
         image:
           type: string
-          example: "https://tebex.io/path/to/image.png"
+          example: 'https://tebex.io/path/to/image.png'
         name:
           type: string
-          example: "100 Coins"
+          example: '100 Coins'
         slug:
           type: string
-          example: "100-coins"
+          example: '100-coins'
         in_basket:
           type: object
           properties:
@@ -1240,7 +1235,7 @@ components:
               description: The username of the user this package is gifted to.
         type:
           type: string
-          enum: [single,subscription]
+          enum: [single, subscription]
           example: single
           description: The type of payment, either `single` for one-time payments or `subscription`.
         revenue_share:
@@ -1272,7 +1267,7 @@ components:
           type: string
           format: date-time
           description: The date and time when the tier became active
-          example: "2025-05-14T13:48:56.000000Z"
+          example: '2025-05-14T13:48:56.000000Z'
         username_id:
           type: string
           description: The user's username ID. For Steam, this is a numeric representation of their Steam64ID
@@ -1290,7 +1285,7 @@ components:
           type: string
           format: date-time
           description: The date and time of the next payment for this tier.
-          example: "2025-06-14T13:48:56+00:00"
+          example: '2025-06-14T13:48:56+00:00'
         status:
           type: object
           properties:
@@ -1311,7 +1306,7 @@ components:
               example: Bronze
           description: The package this tier is downgrading to if a downgrade is pending.
           nullable: true
-    
+
     PackageMedia:
       properties:
         type:
