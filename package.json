@@ -23,7 +23,7 @@
 		"auth:schema": "better-auth generate --config src/lib/server/auth.ts --output src/lib/server/db/auth.schema.ts --yes",
 		"shadcn": "bun x shadcn-svelte@latest add --yes",
 		"shadcn:update": "bun x shadcn-svelte@latest update --all --yes",
-		"tebex:generate": "openapi-typescript openapi.yaml -o src/api/schema.d.ts",
+		"tebex:generate": "openapi-typescript openapi.yaml -o src/lib/tebex/headless/schema.d.ts",
 		"tebex:update": "bun scripts/tebex-api.ts && bun run tebex:generate"
 	},
 	"devDependencies": {
