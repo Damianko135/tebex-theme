@@ -2,10 +2,11 @@
 	import { goto } from '$app/navigation';
 	import { ModeWatcher } from 'mode-watcher';
 	import { toast } from 'svelte-sonner';
-	import LoaderCircleIcon from '@lucide/svelte/icons/loader-circle';
 	import { Toaster } from '$lib/components/ui/sonner/index.js';
 	import LightToggle from '$lib/components/light-toggle.svelte';
 	import { Button } from '$lib/components/ui/button/index.js';
+	import * as ButtonGroup from '$lib/components/ui/button-group/index.js';
+	import { Spinner } from '$lib/components/ui/spinner/index.js';
 	import { Header } from '$lib/components/layout/header';
 	import { Footer } from '$lib/components/layout/footer';
 	import type { NavItem } from '$lib/components/layout/types.js';
@@ -48,17 +49,19 @@
 <div class="flex min-h-svh flex-col">
 	<Header {appName} {navItems}>
 		{#snippet actions()}
-			<LightToggle />
-			{#if data.user}
-				<Button variant="ghost" size="sm" onclick={signOut} disabled={signingOut}>
-					{#if signingOut}
-						<LoaderCircleIcon class="animate-spin" />
-					{/if}
-					Sign out
-				</Button>
-			{:else}
-				<Button href={resolve('/login')} variant="ghost" size="sm">Login</Button>
-			{/if}
+			<ButtonGroup.Root>
+				<LightToggle />
+				{#if data.user}
+					<Button variant="ghost" size="sm" onclick={signOut} disabled={signingOut}>
+						{#if signingOut}
+							<Spinner data-icon="inline-start" />
+						{/if}
+						Sign out
+					</Button>
+				{:else}
+					<Button href={resolve('/login')} variant="ghost" size="sm">Login</Button>
+				{/if}
+			</ButtonGroup.Root>
 		{/snippet}
 	</Header>
 	<main class="flex flex-1 flex-col">
