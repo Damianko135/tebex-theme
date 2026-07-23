@@ -1,12 +1,10 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
 	import { ModeWatcher } from 'mode-watcher';
-	import { toast } from 'svelte-sonner';
 	import { Toaster } from '$lib/components/ui/sonner/index.js';
 	import LightToggle from '$lib/components/light-toggle.svelte';
+	import SignOutButton from '$lib/components/sign-out-button.svelte';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import * as ButtonGroup from '$lib/components/ui/button-group/index.js';
-	import { Spinner } from '$lib/components/ui/spinner/index.js';
 	import { Header } from '$lib/components/layout/header';
 	import { Footer } from '$lib/components/layout/footer';
 	import type { NavItem } from '$lib/components/layout/types.js';
@@ -14,7 +12,6 @@
 	import { resolve } from '$app/paths';
 	import { page } from '$app/state';
 	import { locales, localizeHref } from '$lib/paraglide/runtime';
-	import { authClient } from '$lib/auth-client';
 	import './layout.css';
 	import favicon from '$lib/assets/favicon.svg';
 	import type { LayoutProps } from './$types';
@@ -24,23 +21,8 @@
 	const appName = 'Tebex';
 	const navItems: NavItem[] = [
 		{ label: 'Home', href: '/' },
-		{ label: 'Login', href: '/login' }
+		{ label: 'Login', href: '/sign-in' }
 	];
-
-	let signingOut = $state(false);
-
-	async function signOut() {
-		signingOut = true;
-		await authClient.signOut({
-			fetchOptions: {
-				onSuccess: () => goto(resolve('/'), { invalidateAll: true }),
-				onError: ({ error }) => {
-					toast.error(error.message || 'Failed to sign out, please try again.');
-					signingOut = false;
-				}
-			}
-		});
-	}
 </script>
 
 <svelte:head><link rel="icon" href={favicon} /></svelte:head>
@@ -52,14 +34,9 @@
 			<ButtonGroup.Root>
 				<LightToggle />
 				{#if data.user}
-					<Button variant="ghost" size="sm" onclick={signOut} disabled={signingOut}>
-						{#if signingOut}
-							<Spinner data-icon="inline-start" />
-						{/if}
-						Sign out
-					</Button>
+					<SignOutButton />
 				{:else}
-					<Button href={resolve('/login')} variant="ghost" size="sm">Login</Button>
+					<Button href={resolve('/sign-in')} variant="ghost" size="sm">Login</Button>
 				{/if}
 			</ButtonGroup.Root>
 		{/snippet}

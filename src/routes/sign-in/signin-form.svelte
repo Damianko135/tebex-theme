@@ -3,20 +3,20 @@
 	import { superForm, type Infer, type SuperValidated } from 'sveltekit-superforms';
 	import { zod4Client } from 'sveltekit-superforms/adapters';
 	import { toast } from 'svelte-sonner';
-	import LoaderCircleIcon from '@lucide/svelte/icons/loader-circle';
 	import * as Form from '$lib/components/ui/form';
 	import * as Card from '$lib/components/ui/card';
 	import { Button } from '$lib/components/ui/button';
 	import { Input } from '$lib/components/ui/input';
-	import { signUpForm } from './schema';
+	import { Spinner } from '$lib/components/ui/spinner';
+	import { signInForm } from './schema';
 
-	let { data }: { data: SuperValidated<Infer<typeof signUpForm>> } = $props();
+	let { data }: { data: SuperValidated<Infer<typeof signInForm>> } = $props();
 
 	const form = superForm(
 		untrack(() => data),
 		{
-			id: 'signUp',
-			validators: zod4Client(signUpForm),
+			id: 'signIn',
+			validators: zod4Client(signInForm),
 			onUpdated: ({ form }) => {
 				if (form.message) toast.error(form.message);
 			}
@@ -28,27 +28,23 @@
 
 <Card.Root class="w-full max-w-sm">
 	<Card.Header>
-		<Card.Title>Create an account</Card.Title>
-		<Card.Description>Enter your details to get started.</Card.Description>
+		<Card.Title>Sign in</Card.Title>
+		<Card.Description>Enter your email and password to continue.</Card.Description>
 	</Card.Header>
 
-	<form method="POST" action="?/signUp" use:enhance>
+	<form method="POST" use:enhance>
 		<Card.Content class="flex flex-col gap-4">
-			<Form.Field {form} name="name">
-				<Form.Control>
-					{#snippet children({ props })}
-						<Form.Label>Name</Form.Label>
-						<Input {...props} autocomplete="name" autofocus bind:value={$formData.name} />
-					{/snippet}
-				</Form.Control>
-				<Form.FieldErrors />
-			</Form.Field>
-
 			<Form.Field {form} name="email">
 				<Form.Control>
 					{#snippet children({ props })}
 						<Form.Label>Email</Form.Label>
-						<Input {...props} type="email" autocomplete="email" bind:value={$formData.email} />
+						<Input
+							{...props}
+							type="email"
+							autocomplete="email"
+							autofocus
+							bind:value={$formData.email}
+						/>
 					{/snippet}
 				</Form.Control>
 				<Form.FieldErrors />
@@ -61,23 +57,8 @@
 						<Input
 							{...props}
 							type="password"
-							autocomplete="new-password"
+							autocomplete="current-password"
 							bind:value={$formData.password}
-						/>
-					{/snippet}
-				</Form.Control>
-				<Form.FieldErrors />
-			</Form.Field>
-
-			<Form.Field {form} name="confirmPassword">
-				<Form.Control>
-					{#snippet children({ props })}
-						<Form.Label>Confirm password</Form.Label>
-						<Input
-							{...props}
-							type="password"
-							autocomplete="new-password"
-							bind:value={$formData.confirmPassword}
 						/>
 					{/snippet}
 				</Form.Control>
@@ -88,9 +69,9 @@
 		<Card.Footer>
 			<Button type="submit" class="w-full" disabled={$submitting}>
 				{#if $delayed}
-					<LoaderCircleIcon class="animate-spin" />
+					<Spinner data-icon="inline-start" />
 				{/if}
-				Sign up
+				Sign in
 			</Button>
 		</Card.Footer>
 	</form>
