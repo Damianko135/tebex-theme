@@ -4,6 +4,10 @@
 			"type": "http",
 			"url": "https://mcp.svelte.dev/mcp"
 		},
+		"better-auth": {
+			"type": "http",
+			"url": "https://mcp.better-auth.com/mcp"
+		},
 		"cloudflare-api": {
 			"type": "http",
 			"url": "https://mcp.cloudflare.com/mcp"
