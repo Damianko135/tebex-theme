@@ -2,7 +2,6 @@ import { fail, redirect } from '@sveltejs/kit';
 import { superValidate, message } from 'sveltekit-superforms';
 import { zod4 } from 'sveltekit-superforms/adapters';
 import { APIError } from 'better-auth/api';
-import { auth } from '$lib/server/auth';
 import { signInForm, signUpForm } from './schema';
 import type { Actions, PageServerLoad } from './$types';
 
@@ -26,7 +25,7 @@ export const actions: Actions = {
 		}
 
 		try {
-			await auth.api.signInEmail({
+			await event.locals.auth.api.signInEmail({
 				body: {
 					email: form.data.email,
 					password: form.data.password
@@ -51,7 +50,7 @@ export const actions: Actions = {
 		}
 
 		try {
-			await auth.api.signUpEmail({
+			await event.locals.auth.api.signUpEmail({
 				body: {
 					name: form.data.name,
 					email: form.data.email,
