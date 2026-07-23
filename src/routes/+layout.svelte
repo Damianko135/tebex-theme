@@ -19,10 +19,17 @@
 	let { children, data }: LayoutProps = $props();
 
 	const appName = 'Tebex';
-	const navItems: NavItem[] = [
-		{ label: 'Home', href: '/' },
-		{ label: 'Login', href: '/sign-in' }
-	];
+	const navItems: NavItem[] = $derived(
+		data.user
+			? [
+					{ label: 'Home', href: '/' },
+					{ label: 'Dashboard', href: '/dashboard' }
+				]
+			: [
+					{ label: 'Home', href: '/' },
+					{ label: 'Login', href: '/sign-in' }
+				]
+	);
 </script>
 
 <svelte:head><link rel="icon" href={favicon} /></svelte:head>
