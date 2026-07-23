@@ -30,6 +30,11 @@ export default defineConfig({
 			emitTsDeclarations: true
 		})
 	],
+	ssr: {
+		// avoid a bare runtime import of @better-auth/core, which resolves to the
+		// wrong hoisted copy when @better-auth/cli pulls in an older version
+		noExternal: ['@better-auth/core']
+	},
 	test: {
 		expect: { requireAssertions: true },
 		projects: [
