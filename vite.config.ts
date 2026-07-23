@@ -31,9 +31,9 @@ export default defineConfig({
 		})
 	],
 	ssr: {
-		// avoid a bare runtime import of @better-auth/core, which resolves to the
+		// avoid bare runtime imports of @better-auth/* packages, which resolve to the
 		// wrong hoisted copy when @better-auth/cli pulls in an older version
-		noExternal: ['@better-auth/core']
+		noExternal: [/^@better-auth\//]
 	},
 	test: {
 		expect: { requireAssertions: true },
