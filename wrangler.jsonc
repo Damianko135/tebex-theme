@@ -10,7 +10,7 @@
 	"assets": {
 		"binding": "ASSETS",
 		"directory": ".svelte-kit/cloudflare"
-	},
+	},	
 	"d1_databases": [
 		{
 			"binding": "DB",

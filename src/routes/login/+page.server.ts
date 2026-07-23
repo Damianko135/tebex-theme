@@ -33,6 +33,7 @@ export const actions: Actions = {
 				}
 			});
 		} catch (error) {
+			if (!(error instanceof APIError)) console.error('[signIn]', error);
 			const errorMessage =
 				error instanceof APIError ? error.message : 'Unexpected error, please try again.';
 			message(form, errorMessage, { status: 400 });
@@ -58,6 +59,7 @@ export const actions: Actions = {
 				}
 			});
 		} catch (error) {
+			if (!(error instanceof APIError)) console.error('[signUp]', error);
 			const errorMessage =
 				error instanceof APIError ? error.message : 'Unexpected error, please try again.';
 			message(form, errorMessage, { status: 400 });
