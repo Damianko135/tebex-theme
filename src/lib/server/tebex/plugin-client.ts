@@ -14,7 +14,7 @@ export interface TebexWebstoreInformation {
 	account: {
 		id: number | string;
 		name: string;
-		currency?: { iso4217?: string };
+		currency?: { iso_4217?: string };
 		domain?: string;
 	};
 }

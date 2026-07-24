@@ -43,6 +43,7 @@
 						<Input {...props} autofocus bind:value={$formData.projectId} />
 					{/snippet}
 				</Form.Control>
+				<Form.Description>Your Tebex store's numeric account ID.</Form.Description>
 				<Form.FieldErrors />
 			</Form.Field>
 

@@ -5,6 +5,7 @@ import { getDb } from '$lib/server/db';
 import { projects } from '$lib/server/db/tebex.schema';
 import { encryptSecret } from '$lib/server/tebex/crypto';
 import { getWebstoreInformation, TebexPluginApiError } from '$lib/server/tebex/plugin-client';
+import { getHeadlessWebstore, TebexHeadlessApiError } from '$lib/server/tebex/headless-client';
 import { connectStoreForm } from './schema';
 import type { Actions, PageServerLoad } from './$types';
 
@@ -35,6 +36,33 @@ export const actions: Actions = {
 			return fail(400, { connectStoreForm: form });
 		}
 
+		if (String(info.account.id) !== form.data.projectId) {
+			message(form, "This secret key doesn't belong to the project ID you entered.", {
+				status: 400
+			});
+			return fail(400, { connectStoreForm: form });
+		}
+
+		let webstore;
+		try {
+			webstore = await getHeadlessWebstore(form.data.publicToken);
+		} catch (error) {
+			if (!(error instanceof TebexHeadlessApiError)) console.error('[tebex.connect]', error);
+			const errorMessage =
+				error instanceof TebexHeadlessApiError
+					? error.message
+					: 'Could not verify the public token with Tebex, please try again.';
+			message(form, errorMessage, { status: 400 });
+			return fail(400, { connectStoreForm: form });
+		}
+
+		if (String(webstore.id) !== form.data.projectId) {
+			message(form, "This public token doesn't belong to the project ID you entered.", {
+				status: 400
+			});
+			return fail(400, { connectStoreForm: form });
+		}
+
 		const db = getDb(event.platform!.env.DB);
 		try {
 			await db.insert(projects).values({
@@ -42,8 +70,8 @@ export const actions: Actions = {
 				name: info.account.name,
 				publicToken: form.data.publicToken,
 				secretKeyEnc: await encryptSecret(form.data.secretKey),
-				tebexAccountId: String(info.account.id),
-				currency: info.account.currency?.iso4217
+				tebexAccountId: form.data.projectId,
+				currency: info.account.currency?.iso_4217
 			});
 		} catch (error) {
 			console.error('[tebex.connect]', error);
