@@ -3,18 +3,16 @@
 	import { resolve } from '$app/paths';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import { cn, type WithElementRef } from '$lib/utils.js';
-	import type { NavItem, SocialLink } from '../types.js';
+	import type { SocialLink } from '../types.js';
+	import { APP_NAME } from '$lib/constants.js';
+	import { nav } from '../nav-items.js';
 
 	let {
 		ref = $bindable(null),
 		class: className,
-		appName,
-		navItems = [],
 		socialLinks = [],
 		...restProps
 	}: WithElementRef<HTMLAttributes<HTMLElement>> & {
-		appName: string;
-		navItems?: NavItem[];
 		socialLinks?: SocialLink[];
 	} = $props();
 
@@ -31,16 +29,23 @@
 		class="mx-auto flex max-w-6xl flex-col items-center gap-4 px-4 py-8 text-sm text-muted-foreground sm:flex-row sm:justify-between"
 	>
 		<p>
-			<a href={resolve('/')} class="font-medium text-foreground hover:underline">{appName}</a>
+			<a href={resolve('/')} class="font-medium text-foreground hover:underline">{APP_NAME}</a>
 			<span class="ms-1">© {year}. All rights reserved.</span>
 		</p>
 
-		{#if navItems.length}
+		{#if nav.items.length}
 			<nav class="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
-				{#each navItems as item (item.href)}
-					<a href={resolve(item.href)} class="hover:text-foreground">
+				{#each nav.items as item (item.href)}
+					<!-- eslint-disable svelte/no-navigation-without-resolve -- item.href is already resolve()d in nav-items.ts -->
+					<a
+						href={item.href}
+						data-sveltekit-preload-data={item.preloadData}
+						data-sveltekit-preload-code={item.preloadCode}
+						class="hover:text-foreground"
+					>
 						{item.label}
 					</a>
+					<!-- eslint-enable svelte/no-navigation-without-resolve -->
 				{/each}
 			</nav>
 		{/if}

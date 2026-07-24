@@ -1,9 +1,14 @@
 import type { Component } from 'svelte';
-import type { Pathname } from '$app/types';
+
+export type PreloadData = 'hover' | 'tap' | 'off';
+export type PreloadCode = 'eager' | 'viewport' | 'hover' | 'tap' | 'off';
 
 export type NavItem = {
 	label: string;
-	href: Pathname;
+	/** Already resolved via `resolve()` - use directly as an `href`. */
+	href: string;
+	preloadData?: PreloadData;
+	preloadCode?: PreloadCode;
 };
 
 export type SocialLink = {

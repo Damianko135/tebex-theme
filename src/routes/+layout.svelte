@@ -1,13 +1,8 @@
 <script lang="ts">
 	import { ModeWatcher } from 'mode-watcher';
 	import { Toaster } from '$lib/components/ui/sonner/index.js';
-	import LightToggle from '$lib/components/light-toggle.svelte';
-	import SignOutButton from '$lib/components/sign-out-button.svelte';
-	import { Button } from '$lib/components/ui/button/index.js';
-	import * as ButtonGroup from '$lib/components/ui/button-group/index.js';
 	import { Header } from '$lib/components/layout/header';
 	import { Footer } from '$lib/components/layout/footer';
-	import type { NavItem } from '$lib/components/layout/types.js';
 	import type { Pathname } from '$app/types';
 	import { resolve } from '$app/paths';
 	import { page } from '$app/state';
@@ -16,42 +11,18 @@
 	import favicon from '$lib/assets/favicon.svg';
 	import type { LayoutProps } from './$types';
 
-	let { children, data }: LayoutProps = $props();
-
-	const appName = 'Tebex';
-	const navItems: NavItem[] = $derived(
-		data.user
-			? [
-					{ label: 'Home', href: '/' },
-					{ label: 'Dashboard', href: '/dashboard' }
-				]
-			: [
-					{ label: 'Home', href: '/' },
-					{ label: 'Login', href: '/sign-in' }
-				]
-	);
+	let { children }: LayoutProps = $props();
 </script>
 
 <svelte:head><link rel="icon" href={favicon} /></svelte:head>
 <ModeWatcher />
 <Toaster />
 <div class="flex min-h-svh flex-col">
-	<Header {appName} {navItems}>
-		{#snippet actions()}
-			<ButtonGroup.Root>
-				<LightToggle />
-				{#if data.user}
-					<SignOutButton />
-				{:else}
-					<Button href={resolve('/sign-in')} variant="ghost" size="sm">Login</Button>
-				{/if}
-			</ButtonGroup.Root>
-		{/snippet}
-	</Header>
+	<Header />
 	<main class="flex flex-1 flex-col">
 		{@render children()}
 	</main>
-	<Footer {appName} {navItems} />
+	<Footer />
 </div>
 
 <div style="display:none">

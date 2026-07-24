@@ -18,7 +18,9 @@ declare global {
 		}
 
 		// interface Error {}
-		// interface PageData {}
+		interface PageData {
+			user?: typeof auth.$Infer.Session.user;
+		}
 		// interface PageState {}
 	}
 }

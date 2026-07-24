@@ -36,6 +36,16 @@
 
 	<form method="POST" use:enhance>
 		<Card.Content class="flex flex-col gap-4">
+			<Form.Field {form} name="projectId">
+				<Form.Control>
+					{#snippet children({ props })}
+						<Form.Label>Project ID</Form.Label>
+						<Input {...props} autofocus bind:value={$formData.projectId} />
+					{/snippet}
+				</Form.Control>
+				<Form.FieldErrors />
+			</Form.Field>
+
 			<Form.Field {form} name="publicToken">
 				<Form.Control>
 					{#snippet children({ props })}

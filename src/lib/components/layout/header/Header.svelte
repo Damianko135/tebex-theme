@@ -1,28 +1,23 @@
 <script lang="ts">
-	import type { Snippet } from 'svelte';
 	import type { HTMLAttributes } from 'svelte/elements';
 	import { resolve } from '$app/paths';
 	import { page } from '$app/state';
 	import MenuIcon from '@lucide/svelte/icons/menu';
 	import * as NavigationMenu from '$lib/components/ui/navigation-menu/index.js';
 	import * as Sheet from '$lib/components/ui/sheet/index.js';
+	import * as ButtonGroup from '$lib/components/ui/button-group/index.js';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import { cn, type WithElementRef } from '$lib/utils.js';
 	import { IsMobile } from '$lib/hooks/is-mobile.svelte.js';
-	import type { NavItem } from '../types.js';
+	import LightToggle from '$lib/components/light-toggle.svelte';
+	import { APP_NAME } from '$lib/constants.js';
+	import { nav } from '../nav-items.js';
 
 	let {
 		ref = $bindable(null),
 		class: className,
-		appName,
-		navItems = [],
-		actions,
 		...restProps
-	}: WithElementRef<HTMLAttributes<HTMLElement>> & {
-		appName: string;
-		navItems?: NavItem[];
-		actions?: Snippet;
-	} = $props();
+	}: WithElementRef<HTMLAttributes<HTMLElement>> = $props();
 
 	const isMobile = new IsMobile();
 	let mobileOpen = $state(false);
@@ -43,17 +38,19 @@
 >
 	<div class="mx-auto flex h-14 max-w-6xl items-center justify-between gap-4 px-4">
 		<a href={resolve('/')} class="shrink-0 text-sm font-semibold">
-			{appName}
+			{APP_NAME}
 		</a>
 
-		{#if navItems.length}
+		{#if nav.items.length}
 			<NavigationMenu.Root viewport={false} class="hidden md:flex">
 				<NavigationMenu.List>
-					{#each navItems as item (item.href)}
+					{#each nav.items as item (item.href)}
 						<NavigationMenu.Item>
 							<NavigationMenu.Link
-								href={resolve(item.href)}
-								data-active={page.url.pathname === resolve(item.href)}
+								href={item.href}
+								data-active={page.url.pathname === item.href}
+								data-sveltekit-preload-data={item.preloadData}
+								data-sveltekit-preload-code={item.preloadCode}
 							>
 								{item.label}
 							</NavigationMenu.Link>
@@ -64,9 +61,31 @@
 		{/if}
 
 		<div class="flex shrink-0 items-center gap-2">
-			{@render actions?.()}
+			<ButtonGroup.Root>
+				<LightToggle />
+				{#if page.data.user}
+					<!--
+						A full-reload link rather than a client-side authClient.signOut()
+						call: entering /logout via a fresh document load guarantees every
+						piece of client-side state (stores, in-memory caches) is discarded,
+						rather than relying on invalidateAll() to catch everything.
+					-->
+					<Button href={resolve('/logout')} data-sveltekit-reload variant="ghost" size="sm">
+						Sign out
+					</Button>
+				{:else}
+					<Button
+						href={resolve('/sign-in')}
+						data-sveltekit-preload-data="off"
+						variant="ghost"
+						size="sm"
+					>
+						Login
+					</Button>
+				{/if}
+			</ButtonGroup.Root>
 
-			{#if navItems.length}
+			{#if nav.items.length}
 				<Sheet.Root bind:open={mobileOpen}>
 					<Sheet.Trigger>
 						{#snippet child({ props })}
@@ -83,21 +102,25 @@
 					</Sheet.Trigger>
 					<Sheet.Content side="right">
 						<Sheet.Header>
-							<Sheet.Title>{appName}</Sheet.Title>
+							<Sheet.Title>{APP_NAME}</Sheet.Title>
 							<Sheet.Description class="sr-only">Site navigation</Sheet.Description>
 						</Sheet.Header>
 						<nav class="flex flex-col gap-1 px-4 pb-4">
-							{#each navItems as item (item.href)}
+							{#each nav.items as item (item.href)}
+								<!-- eslint-disable svelte/no-navigation-without-resolve -- item.href is already resolve()d in nav-items.ts -->
 								<a
-									href={resolve(item.href)}
+									href={item.href}
+									data-sveltekit-preload-data={item.preloadData}
+									data-sveltekit-preload-code={item.preloadCode}
 									class={cn(
 										'rounded-lg px-3 py-2 text-sm hover:bg-muted',
-										page.url.pathname === resolve(item.href) && 'bg-muted/50 font-medium'
+										page.url.pathname === item.href && 'bg-muted/50 font-medium'
 									)}
 									onclick={() => (mobileOpen = false)}
 								>
 									{item.label}
 								</a>
+								<!-- eslint-enable svelte/no-navigation-without-resolve -->
 							{/each}
 						</nav>
 					</Sheet.Content>
